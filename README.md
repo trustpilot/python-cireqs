@@ -1,13 +1,13 @@
-#cireqs
+# cireqs
 
 Tool to expand and pin requirements files and verify that they are complete.
 
-##install
+## install
 Install from pypi.
 
 `pip install cireqs`
 
-##usage
+## usage
 
 Cireqs uses overridable defaults:
 
