@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/trustpilot/python-cireqs.svg?branch=master)](https://travis-ci.org/trustpilot/python-cireqs) [![Latest Version](https://img.shields.io/pypi/v/cireqs.svg)](https://pypi.python.org/pypi/cireqs) [![Python Support](https://img.shields.io/pypi/pyversions/cireqs.svg)](https://pypi.python.org/pypi/cireqs)
+
 # cireqs
 
 Tool to expand and pin requirements files and verify that they are complete.
