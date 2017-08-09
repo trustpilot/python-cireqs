@@ -6,3 +6,9 @@ History
 ------------------
 
 * git init
+
+
+0.0.2 (2017-08-09)
+------------------
+
+* missing manifest file

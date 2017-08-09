@@ -42,3 +42,32 @@ script:
   - cireqs verify_requirements
 ```
 
+
+## cli
+
+```
+
+           o8o
+           `"'
+ .ooooo.  oooo  oooo d8b  .ooooo.   .ooooo oo  .oooo.o
+d88' `"Y8 `888  `888""8P d88' `88b d88' `888  d88(  "8
+888        888   888     888ooo888 888   888  `"Y88b.
+888   .o8  888   888     888    .o 888   888  o.  )88b
+`Y8bod8P' o888o d888b    `Y8bod8P' `V8bod888  8""888P'
+                                         888.
+                                         8P'  v0.0.1
+
+Usage: cireqs [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --pythonversion TEXT  python version to use for calculating dependencies
+  --dirpath TEXT        path to directory containing requirement files,
+                        defaults to PWD
+  -v, --verbosity LVL   Either CRITICAL, ERROR, WARNING, INFO or DEBUG
+  --help                Show this message and exit.
+
+Commands:
+  expand_requirements  Expand given requirements file by extending...
+  verify_requirements  verifying that given requirements file is not...
+```
+
