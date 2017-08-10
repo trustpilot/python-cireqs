@@ -57,7 +57,7 @@ def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5
             logger.exception("command resulted in error. " + ' '.join(full_command_list))
         elif isinstance(exc, TimeoutExpired):
             logger.warning("received timeout")
-        #docker_kill_and_remove(ctr_name)
+        docker_kill_and_remove(ctr_name)
         exit(1)
 
 
