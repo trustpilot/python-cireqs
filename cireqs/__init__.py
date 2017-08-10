@@ -19,7 +19,7 @@ def docker_kill_and_remove(ctr_name):
             logger.exception('could not stop docker container')
 
 
-def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5.2', timeout=10, ):
+def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5.2', timeout=10, **kwargs):
     volumes = volumes or {}
     volumes = [t for k,v in volumes.items() for t in ['-v', ':'.join([k,v])]]
     working_dir = ['-w', working_dir] if working_dir else []
@@ -61,7 +61,7 @@ def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5
         exit(1)
 
 
-def expand_requirements(dir_path, requirements_filename, expanded_requirements_filename, python_version='3.5.2'):
+def expand_requirements(dir_path, requirements_filename, expanded_requirements_filename, **kwargs):
     commands = [
         "pip install -q -r {}".format(requirements_filename),
         "pip freeze -r {} > {}".format(
@@ -73,12 +73,12 @@ def expand_requirements(dir_path, requirements_filename, expanded_requirements_f
     volumes = {
         dir_path: '/src'
     }
-    docker_execute(commands, volumes, working_dir, python_version)
+    docker_execute(commands, volumes, working_dir, **kwargs)
     logger.debug("Requirements expanded from {} to {}".format(
         requirements_filename, expanded_requirements_filename))
 
 
-def check_if_requirements_are_up_to_date(dir_path, requirements_filename, python_version='3.5.2'):
+def check_if_requirements_are_up_to_date(dir_path, requirements_filename, **kwargs):
     commands = [
         "pip install -q -r {} ".format(requirements_filename),
         "pip freeze -r {} ".format(requirements_filename)
@@ -88,7 +88,7 @@ def check_if_requirements_are_up_to_date(dir_path, requirements_filename, python
     volumes = {
         dir_path: '/src'
     }
-    frozen_reqs = docker_execute(commands, volumes, working_dir, python_version).decode('utf-8')
+    frozen_reqs = docker_execute(commands, volumes, working_dir, **kwargs).decode('utf-8')
 
     frozen_token = "## The following requirements were added by pip freeze:\n"
 

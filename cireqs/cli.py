@@ -15,19 +15,21 @@ sys.path.insert(0, current_dir[: current_dir.rfind(path.sep)])
 import cireqs
 
 
-conf = namedtuple('Config', 'dir_path python_version')
+conf = namedtuple('Config', 'dir_path python_version timeout')
 
 
 @click.group(invoke_without_command=True)
 @click.pass_context
 @click.option('--pythonversion', nargs=1, type=str, default='3.5.2', help='python version to use for calculating dependencies')
 @click.option('--dirpath', nargs=1, help="path to directory containing requirement files, defaults to PWD")
+@click.option('--timeout', nargs=1, type=int, default=10, help="how long to wait for docker commands")
 @click_log.simple_verbosity_option()
 @click_log.init('cireqs.cli')
-def cli(ctx, dirpath, pythonversion):
+def cli(ctx, dirpath, pythonversion, timeout):
     ctx.obj = conf(
         python_version=pythonversion,
-        dir_path=dirpath or getcwd()
+        dir_path=dirpath or getcwd(),
+        timeout=timeout
     )
     cireqs.set_log_level(click_log.get_level())
 
@@ -84,7 +86,9 @@ def verify_requirements(conf, input_requirements_filename):
     input_requirements_filename: requriements file to verify
 
     '''
-    cireqs.check_if_requirements_are_up_to_date(requirements_filename=input_requirements_filename, **conf._asdict())
+    cireqs.check_if_requirements_are_up_to_date(
+        requirements_filename=input_requirements_filename,
+        **conf._asdict())
     logger.debug("Requirements are up to date")
 
 
