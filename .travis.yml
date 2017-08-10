@@ -1,4 +1,7 @@
 sudo: required
+addons:
+  apt_packages:
+    - pandoc
 language: python
 python:
 - '2.7'
@@ -15,6 +18,13 @@ script:
 - tox
 branches:
   only: master
+
+before_deploy:
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - export GIT_TAG=$(grep version setup.py | cut -d \' -f2)
+  - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
+  - git push --quiet https://$GITHUBKEY@github.com/trustpilot/python-cireqs $GIT_TAG > /dev/null 2>&1
 deploy:
   - provider: pypi
     distributions: sdist
@@ -40,3 +50,6 @@ deploy:
       tags: false
       branch: master
       condition: $TRAVIS_PYTHON_VERSION = "3.5"
+branches:
+  except:
+    - /^v?\d+\.\d+\.\d+$/
