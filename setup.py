@@ -21,8 +21,13 @@ requirements = [
 ]
 
 test_requirements = [
-    'pytest==3.2.0'
+    'pytest==3.2.0',
+    'prospector==0.12.5'
 ]
+
+extras = {
+    'test': test_requirements + requirements,
+}
 
 setup(
     name='cireqs',
@@ -56,5 +61,7 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
     test_suite='tests',
-    tests_require=test_requirements
+    tests_require=test_requirements,
+    extras_require=extras,
+
 )

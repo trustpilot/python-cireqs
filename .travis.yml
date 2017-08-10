@@ -3,16 +3,21 @@ sudo: required
 language: python
 
 python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
   - "3.5"
+  - "3.6"
 
 services:
   - docker
 
-before_script:
-  - pip install -q -r requirements.txt
+install:
+  - pip install tox
+  - pip install tox-travis
 
 script:
-  - pytest
+  - tox
 
 branches:
   only: master
