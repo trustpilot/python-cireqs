@@ -24,7 +24,11 @@ before_deploy:
   - git config --global user.name "sloev"
   - export GIT_TAG=$(grep version setup.py | cut -d \' -f2)
   - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
-  - git push --quiet https://$GITHUBKEY@github.com/trustpilot/python-cireqs $GIT_TAG > /dev/null 2>&1
+  - git push --quiet https://$GITHUB_TOKEN@github.com/trustpilot/python-cireqs $GIT_TAG > /dev/null 2>&1
+env:
+  global:
+    secure: KOmwk0gAH4Zzy6LC+szWGmi1uw4Ehpm/VSMWbP2M0CrAEMMeIGvhBtR4FSEFJAb2SO4PXteShLT47bA3F0w4WSBDyShXMpvmrbfkcszyZdPc48LVyP+vbqa2MvHvJ7nMsSuVc+yXDGFCYtSZKH7jALl1W1d2gC3oVTgd/BYYvzBwoGB+WawdjysTB2uqezTOLjYUsNU7j03rilHdNGBBN2xHGhwV2IUN2eQj01Ie4hj4fkSW0wFzo74ul9YD/kdSER+kQMoLAsDTbxN2g91vEk9EFVEhapJKqyF7i9JdGbFOUSRo4WnQNIFUNNzoiXiPLVx5L/+vJBemVdG6BoLjSJXqO6rcxe0eIB3gHX8mIKJPLoOEqIsyCif93ZGTZAyKFYavo9EpWyU1HpXGITdmT3ktQbedzvwwKpueqsYfiS+CIf8WNQCm8EPdvCOnU3qIVQ7D0EK0INIZ97xhjKEACeyOTykyy/lW0y5+zqOgD8lWb0socLqZPRAGOmYNwjEH4GS+iEqsRSictMcnli4lDGmbRI0Kzx8lKQsezh6ziXY6p1Tt0qUv7wLGFESPsxErl6B1kQtOZAjH0bdo5eZMr9KxO40JoazuaPpvh1hZSPtGmxP9Epv8dkmZFyGrzHtdRT58OQQa4OOl1cA3lcWHwd+wr8iSohgw4h1dKbwgjdk=
+
 deploy:
   - provider: pypi
     distributions: sdist
@@ -39,9 +43,6 @@ deploy:
     skip_cleanup: true
 
   - provider: releases
-    api_key:
-      secure: KOmwk0gAH4Zzy6LC+szWGmi1uw4Ehpm/VSMWbP2M0CrAEMMeIGvhBtR4FSEFJAb2SO4PXteShLT47bA3F0w4WSBDyShXMpvmrbfkcszyZdPc48LVyP+vbqa2MvHvJ7nMsSuVc+yXDGFCYtSZKH7jALl1W1d2gC3oVTgd/BYYvzBwoGB+WawdjysTB2uqezTOLjYUsNU7j03rilHdNGBBN2xHGhwV2IUN2eQj01Ie4hj4fkSW0wFzo74ul9YD/kdSER+kQMoLAsDTbxN2g91vEk9EFVEhapJKqyF7i9JdGbFOUSRo4WnQNIFUNNzoiXiPLVx5L/+vJBemVdG6BoLjSJXqO6rcxe0eIB3gHX8mIKJPLoOEqIsyCif93ZGTZAyKFYavo9EpWyU1HpXGITdmT3ktQbedzvwwKpueqsYfiS+CIf8WNQCm8EPdvCOnU3qIVQ7D0EK0INIZ97xhjKEACeyOTykyy/lW0y5+zqOgD8lWb0socLqZPRAGOmYNwjEH4GS+iEqsRSictMcnli4lDGmbRI0Kzx8lKQsezh6ziXY6p1Tt0qUv7wLGFESPsxErl6B1kQtOZAjH0bdo5eZMr9KxO40JoazuaPpvh1hZSPtGmxP9Epv8dkmZFyGrzHtdRT58OQQa4OOl1cA3lcWHwd+wr8iSohgw4h1dKbwgjdk=
-    file: foo
     file_glob: true
     file: build/*
     skip_cleanup: true
