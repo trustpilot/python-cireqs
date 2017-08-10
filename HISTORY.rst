@@ -12,3 +12,11 @@ History
 ------------------
 
 * missing manifest file
+
+0.0.3 (2017-08-10)
+------------------
+
+* readme changes
+* cli splash changes
+* make cireqs functions pass python version to docker_execute
+
