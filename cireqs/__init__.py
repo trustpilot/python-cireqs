@@ -1,7 +1,7 @@
 __version__ = '0.0.3'
 import logging
 import os
-from subprocess import check_output, CalledProcessError, TimeoutExpired, STDOUT
+from subprocess import check_output, CalledProcessError, TimeoutExpired, STDOUT, DEVNULL
 
 
 logger = logging.getLogger(__name__)
@@ -25,9 +25,23 @@ def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5
     working_dir = ['-w', working_dir] if working_dir else []
     command = ' && '.join(commands)
     ctr_name = 'cireqs_container'
+    docker_image = 'python:{}'.format(python_version)
+
+    # check if has image locally:
+    has_image = check_output(
+        ['docker', 'images','-q', docker_image],
+        stderr=DEVNULL
+    )
+    if not has_image:
+        logger.debug('pulling docker image: {}'.format(docker_image))
+        check_output(
+            ['docker', 'pull', docker_image],
+            stderr=STDOUT
+        )
+
     full_command_list = [
        'docker', 'run', '--rm', '--name', ctr_name, *volumes, *working_dir,
-       'python:{}'.format(python_version), 'sh', '-c', command
+       docker_image, 'sh', '-c', command
     ]
     logger.debug("issuing command: %s", " ".join(full_command_list))
     try:
