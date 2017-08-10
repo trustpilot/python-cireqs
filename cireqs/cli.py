@@ -12,7 +12,7 @@ from collections import namedtuple
 current_dir = path.dirname(path.abspath(getsourcefile(lambda: 0)))
 sys.path.insert(0, current_dir[: current_dir.rfind(path.sep)])
 
-import cireqs
+import cireqs  #pylint: disable=import-error
 
 
 conf = namedtuple('Config', 'dir_path python_version timeout')
@@ -56,7 +56,7 @@ d88' `"Y8 `888  `888""8P d88' `88b d88' `888  d88(  "8
 @click.argument('output_requirements_filename', nargs=1, type=str, default='requirements.txt')
 @click.pass_obj
 def expand_requirements(conf, output_requirements_filename, input_requirements_filename):
-    '''Expand given requirements file by extending it using pip freeze
+    """Expand given requirements file by extending it using pip freeze
 
     args:
 
@@ -64,7 +64,7 @@ def expand_requirements(conf, output_requirements_filename, input_requirements_f
 
     output_requirements_filename: the output filename for the expanded
     requirements file
-    '''
+    """
 
     cireqs.expand_requirements(
         requirements_filename=input_requirements_filename,
@@ -79,13 +79,13 @@ def expand_requirements(conf, output_requirements_filename, input_requirements_f
 @click.argument('input_requirements_filename', nargs=1, type=str, default='requirements.txt')
 @click.pass_obj
 def verify_requirements(conf, input_requirements_filename):
-    '''verifying that given requirements file is not missing any pins
+    """verifying that given requirements file is not missing any pins
 
     args:
 
     input_requirements_filename: requriements file to verify
 
-    '''
+    """
     cireqs.check_if_requirements_are_up_to_date(
         requirements_filename=input_requirements_filename,
         **conf._asdict())
@@ -93,4 +93,4 @@ def verify_requirements(conf, input_requirements_filename):
 
 
 if __name__ == "__main__":
-    cli()
+    cli() #pylint: disable=no-value-for-parameter
