@@ -19,4 +19,4 @@ History
 * readme changes
 * cli splash changes
 * make cireqs functions pass python version to docker_execute
-
+* pass timeout param from cli to cireqs
