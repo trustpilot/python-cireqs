@@ -22,7 +22,7 @@ requirements = [
 
 test_requirements = [
     'pytest==3.2.0',
-    'prospector==0.12.5'
+    'prospector==0.12.7'
 ]
 
 extras = {
@@ -31,7 +31,7 @@ extras = {
 
 setup(
     name='cireqs',
-    version='0.0.3',
+    version='0.0.4',
     description="cli tool to verify and update requirements files",
     long_description=readme + '\n\n' + history,
     author="jgv",
