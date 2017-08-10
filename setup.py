@@ -26,7 +26,7 @@ test_requirements = [
 
 setup(
     name='cireqs',
-    version='0.0.2',
+    version='0.0.3',
     description="cli tool to verify and update requirements files",
     long_description=readme + '\n\n' + history,
     author="jgv",

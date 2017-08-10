@@ -10,24 +10,35 @@ Install from pypi.
 
 `pip install cireqs`
 
+Cireqs needs a working install of docker locally.
+
 ## usage
 
-Cireqs uses overridable defaults:
+Use cireqs to expand and pin down your dependencies.
 
-* **dirpath:** set to PWD
-* **pythonversion:** set to `3.5.2`
-* **output_requirements_filename:** set to `requirements.txt`
-* **input_requirements_filename:** set to:
-* * `requirements.txt` in `verify_requirements`
-* * `requirements_to_expand.txt` in `expand_requirements`
-
+You can then check in the resulting requirements file and stop worrying about floating versions.
 
 ```bash
 cireqs --dirpath /tmp expand_requirements input_requirements_filename output_requirements_filename
+```
 
+Use cireqs to verify that a requirements file is pinned down and includes all requirements of requirements.
+```bash
 cireqs verify_requirements input_requirements
 ```
 
+#### defaults
+
+Cireqs uses overridable defaults:
+
+* **dirpath:** set to current working directory (`PWD`)
+* **pythonversion:** set to `3.5.2`
+* **output_requirements_filename:** set to `requirements.txt`
+* **input_requirements_filename:** set to:
+* * `requirements.txt` in *verify_requirements*
+* * `requirements_to_expand.txt` in *expand_requirements*
+
+## continous integration
 Use it in your **CI** of choice!!!
 
 **travis**
@@ -44,9 +55,9 @@ script:
 
 
 ## cli
+Cireqs includes the `cireqs` command:
 
 ```
-
            o8o
            `"'
  .ooooo.  oooo  oooo d8b  .ooooo.   .ooooo oo  .oooo.o
@@ -55,7 +66,7 @@ d88' `"Y8 `888  `888""8P d88' `88b d88' `888  d88(  "8
 888   .o8  888   888     888    .o 888   888  o.  )88b
 `Y8bod8P' o888o d888b    `Y8bod8P' `V8bod888  8""888P'
                                          888.
-                                         8P'  v0.0.1
+                                         8P'  v0.0.3
 
 Usage: cireqs [OPTIONS] COMMAND [ARGS]...
 
@@ -70,4 +81,3 @@ Commands:
   expand_requirements  Expand given requirements file by extending...
   verify_requirements  verifying that given requirements file is not...
 ```
-
