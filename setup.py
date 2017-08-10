@@ -26,7 +26,7 @@ test_requirements = [
 ]
 
 extras = {
-    'test': test_requirements + requirements,
+    'test': test_requirements + requirements + ['pypandoc']
 }
 
 setup(
