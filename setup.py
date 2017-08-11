@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
+import os.path
 
 try:
     from pypandoc import convert
@@ -26,12 +27,17 @@ test_requirements = [
 ]
 
 extras = {
-    'test': test_requirements + requirements + ['pypandoc']
+    'test': test_requirements + requirements
 }
+
+# get version
+metadata = {}
+version_filename = os.path.join(os.path.dirname(__file__), 'cireqs','__version__.py')
+exec(open(version_filename).read(), None, metadata)
 
 setup(
     name='cireqs',
-    version='0.1.0',
+    version=metadata['__version__'],
     description="cli tool to verify and update requirements files",
     long_description=readme + '\n\n' + history,
     author="jgv",
