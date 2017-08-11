@@ -1,4 +1,3 @@
-=======
 History
 =======
 
@@ -28,3 +27,8 @@ History
 * more thorough diffing of requirements files
 * more tests
 * use prospector for linting
+
+0.1.3 (2017-08-11)
+------------------
+
+* single source version in setup.py and cli
