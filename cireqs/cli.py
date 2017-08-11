@@ -12,7 +12,8 @@ from collections import namedtuple
 current_dir = path.dirname(path.abspath(getsourcefile(lambda: 0)))
 sys.path.insert(0, current_dir[: current_dir.rfind(path.sep)])
 
-import cireqs  #pylint: disable=import-error
+
+import cireqs.__version__  #pylint: disable=import-error
 
 
 conf = namedtuple('Config', 'dir_path python_version timeout')
@@ -44,7 +45,7 @@ d88' `"Y8 `888  `888""8P d88' `88b d88' `888  d88(  "8
                                          888.
                                          8P'  """
     splash = click.style(splash, fg='green') + click.style(
-        "v{}".format(cireqs.__version__), fg='red') + "\n"
+        "v{}".format(cireqs.__version__.__version__), fg='red') + "\n"
 
     if ctx.invoked_subcommand is None:
         click.echo("\n".join([splash, ctx.get_help()]))
