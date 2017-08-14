@@ -23,7 +23,7 @@ conf = namedtuple('Config', 'dir_path python_version timeout')
 @click.pass_context
 @click.option('--pythonversion', nargs=1, type=str, default='3.5.2', help='python version to use for calculating dependencies')
 @click.option('--dirpath', nargs=1, help="path to directory containing requirement files, defaults to PWD")
-@click.option('--timeout', nargs=1, type=int, default=10, help="how long to wait for docker commands")
+@click.option('--timeout', nargs=1, type=int, default=120, help="how long to wait for docker commands")
 @click_log.simple_verbosity_option()
 @click_log.init('cireqs.cli')
 def cli(ctx, dirpath, pythonversion, timeout):

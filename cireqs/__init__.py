@@ -35,7 +35,7 @@ def docker_kill_and_remove(ctr_name):
         logger.error('could not stop docker container:{}'.format(ctr_name))
 
 
-def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5.2', timeout=10, **kwargs):
+def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5.2', timeout=120, **kwargs):
     volumes = volumes or {}
     volumes = [t for k,v in volumes.items() for t in ['-v', ':'.join([k,v])]]
     working_dir = ['-w', working_dir] if working_dir else []
