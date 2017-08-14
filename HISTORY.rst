@@ -32,3 +32,8 @@ History
 ------------------
 
 * single source version in setup.py and cli
+
+0.2.2 (2017-08-14)
+------------------
+
+* default timeout value for docker operations increased to 120 seconds (from 10)
