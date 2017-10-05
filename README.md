@@ -5,14 +5,15 @@
 
 Tool to expand and pin requirements files and verify that they are complete.
 
-## install
-Install from pypi.
+## Installation
+
+Install from [pypi](https://pypi.python.org/pypi/cireqs).
 
 `pip install cireqs`
 
 Cireqs needs a working install of docker locally.
 
-## usage
+## Usage
 
 Use cireqs to expand and pin down your dependencies.
 
@@ -27,7 +28,7 @@ Use cireqs to verify that a requirements file is pinned down and includes all re
 cireqs verify_requirements input_requirements
 ```
 
-#### defaults
+#### Defaults
 
 Cireqs uses overridable defaults:
 
@@ -38,7 +39,8 @@ Cireqs uses overridable defaults:
 * * `requirements.txt` in *verify_requirements*
 * * `requirements_to_expand.txt` in *expand_requirements*
 
-## continous integration
+## Continuous Integration
+
 Use it in your **CI** of choice!!!
 
 **travis**
@@ -53,8 +55,8 @@ script:
   - cireqs verify_requirements
 ```
 
+## CLI
 
-## cli
 Cireqs includes the `cireqs` command:
 
 ```
