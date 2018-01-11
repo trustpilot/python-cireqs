@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 import click
 import click_log
 logger = click_log.basic_config()
