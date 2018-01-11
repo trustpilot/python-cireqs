@@ -56,7 +56,7 @@ d88' `"Y8 `888  `888""8P d88' `88b d88' `888  d88(  "8
 @click.argument('input_requirements_filename', nargs=1, type=str, default='requirements_to_expand.txt')
 @click.argument('output_requirements_filename', nargs=1, type=str, default='requirements.txt')
 @click.pass_obj
-def expand_requirements(conf, output_requirements_filename, input_requirements_filename):
+def expand(conf, output_requirements_filename, input_requirements_filename):
     """Expand given requirements file by extending it using pip freeze
 
     args:
@@ -72,14 +72,25 @@ def expand_requirements(conf, output_requirements_filename, input_requirements_f
         expanded_requirements_filename=output_requirements_filename,
         **conf._asdict()
     )
-    logger.info("{} expanded to {} using pip freeze".format(
-        input_requirements_filename, output_requirements_filename))
+    click.echo(click.style('✓', fg='green') + " {} has been expanded into {}".format(
+        input_requirements_filename, output_requirements_filename
+    ))
+
+
+@cli.command()
+@click.argument('input_requirements_filename', nargs=1, type=str, default='requirements_to_expand.txt')
+@click.argument('output_requirements_filename', nargs=1, type=str, default='requirements.txt')
+@click.pass_obj
+@click.pass_context
+def expand_requirements(ctx, conf, output_requirements_filename, input_requirements_filename):
+    click.echo(click.style('expand_requirements is being deprecated, please use expand instead!', fg='red'))
+    ctx.forward(expand)
 
 
 @cli.command()
 @click.argument('input_requirements_filename', nargs=1, type=str, default='requirements.txt')
 @click.pass_obj
-def verify_requirements(conf, input_requirements_filename):
+def verify(conf, input_requirements_filename):
     """verifying that given requirements file is not missing any pins
 
     args:
@@ -90,7 +101,16 @@ def verify_requirements(conf, input_requirements_filename):
     cireqs.check_if_requirements_are_up_to_date(
         requirements_filename=input_requirements_filename,
         **conf._asdict())
-    logger.debug("Requirements are up to date")
+    click.echo(click.style('✓', fg='green') + " {} has been verified".format(input_requirements_filename))
+
+
+@cli.command()
+@click.argument('input_requirements_filename', nargs=1, type=str, default='requirements.txt')
+@click.pass_obj
+@click.pass_context
+def verify_requirements(ctx, conf, input_requirements_filename):
+    click.echo(click.style('verify_requirements is being deprecated, please use verify instead!', fg='red'))
+    ctx.forward(verify)
 
 
 if __name__ == "__main__":
