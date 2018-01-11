@@ -7,9 +7,6 @@ from os import path, getcwd
 
 from inspect import getsourcefile
 from collections import namedtuple
-import warnings
-warnings.simplefilter('always', DeprecationWarning)
-
 
 
 current_dir = path.dirname(path.abspath(getsourcefile(lambda: 0)))
@@ -75,8 +72,10 @@ def expand(conf, output_requirements_filename, input_requirements_filename):
         expanded_requirements_filename=output_requirements_filename,
         **conf._asdict()
     )
-    logger.info("{} expanded to {} using pip freeze".format(
-        input_requirements_filename, output_requirements_filename))
+    click.echo(click.style('✓', fg='green') + " {} has been expanded into {}".format(
+        input_requirements_filename, output_requirements_filename
+    ))
+
 
 @cli.command()
 @click.argument('input_requirements_filename', nargs=1, type=str, default='requirements_to_expand.txt')
@@ -84,7 +83,7 @@ def expand(conf, output_requirements_filename, input_requirements_filename):
 @click.pass_obj
 @click.pass_context
 def expand_requirements(ctx, conf, output_requirements_filename, input_requirements_filename):
-    warnings.warn("expand_requirements is being deprecated, please use expand instead!", DeprecationWarning)
+    click.echo(click.style('expand_requirements is being deprecated, please use expand instead!', fg='red'))
     ctx.forward(expand)
 
 
@@ -102,7 +101,7 @@ def verify(conf, input_requirements_filename):
     cireqs.check_if_requirements_are_up_to_date(
         requirements_filename=input_requirements_filename,
         **conf._asdict())
-    logger.debug("Requirements are up to date")
+    click.echo(click.style('✓', fg='green') + " {} has been verified".format(input_requirements_filename))
 
 
 @cli.command()
@@ -110,7 +109,7 @@ def verify(conf, input_requirements_filename):
 @click.pass_obj
 @click.pass_context
 def verify_requirements(ctx, conf, input_requirements_filename):
-    warnings.warn("verify_requirements is being deprecated, please use verify instead!", DeprecationWarning)
+    click.echo(click.style('verify_requirements is being deprecated, please use verify instead!', fg='red'))
     ctx.forward(verify)
 
 

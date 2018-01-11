@@ -14,7 +14,7 @@ def test_expand_requirements():
 
     runner = CliRunner()
     result = runner.invoke(cli,
-                           ['--dirpath', test_dir_path, 'expand_requirements',
+                           ['--dirpath', test_dir_path, 'expand',
                             input_requirements_filename,
                             output_requirements_filename])
 
@@ -32,7 +32,7 @@ def test_verify_requirements_with_error():
     requirements_filename = 'input_requirements_2.txt'
     runner = CliRunner()
     result = runner.invoke(cli,
-                           ['--dirpath', test_dir_path, 'verify_requirements',
+                           ['--dirpath', test_dir_path, 'verify',
                             requirements_filename])
     assert result.exit_code == -1
 
@@ -42,7 +42,7 @@ def test_timeout_error():
     requirements_filename = 'input_requirements_3.txt'
     runner = CliRunner()
     result = runner.invoke(cli,
-                           ['--dirpath', test_dir_path, '--timeout', 0, 'verify_requirements',
+                           ['--dirpath', test_dir_path, '--timeout', 0, 'verify',
                             requirements_filename])
     assert result.exit_code == -1
 
@@ -51,6 +51,6 @@ def test_verify_requirements():
     requirements_filename = 'input_requirements_3.txt'
     runner = CliRunner()
     result = runner.invoke(cli,
-                           ['--dirpath', test_dir_path, 'verify_requirements',
+                           ['--dirpath', test_dir_path, 'verify',
                             requirements_filename])
     assert result.exit_code == 0
