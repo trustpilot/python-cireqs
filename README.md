@@ -20,12 +20,12 @@ Use cireqs to expand and pin down your dependencies.
 You can then check in the resulting requirements file and stop worrying about floating versions.
 
 ```bash
-cireqs --dirpath /tmp expand_requirements input_requirements_filename output_requirements_filename
+cireqs --dirpath /tmp expand input_requirements_filename output_requirements_filename
 ```
 
 Use cireqs to verify that a requirements file is pinned down and includes all requirements of requirements.
 ```bash
-cireqs verify_requirements input_requirements
+cireqs verify input_requirements
 ```
 
 #### Defaults
@@ -36,8 +36,8 @@ Cireqs uses overridable defaults:
 * **pythonversion:** set to `3.5.2`
 * **output_requirements_filename:** set to `requirements.txt`
 * **input_requirements_filename:** set to:
-* * `requirements.txt` in *verify_requirements*
-* * `requirements_to_expand.txt` in *expand_requirements*
+* * `requirements.txt` in *verify*
+* * `requirements_to_expand.txt` in *expand*
 
 ## Continuous Integration
 
@@ -52,7 +52,7 @@ before_script:
   - pip install cireqs
 
 script:
-  - cireqs verify_requirements
+  - cireqs verify
 ```
 
 ## CLI
@@ -71,5 +71,5 @@ Options:
 
 Commands:
   expand  Expand given requirements file by extending...
-  verify  verifying that given requirements file is not...
+  verify  Verifying that given requirements file is not...
 ```

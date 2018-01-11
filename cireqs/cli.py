@@ -93,7 +93,7 @@ def expand_requirements(ctx, conf, output_requirements_filename, input_requireme
 @click.argument('input_requirements_filename', nargs=1, type=str, default='requirements.txt')
 @click.pass_obj
 def verify(conf, input_requirements_filename):
-    """verifying that given requirements file is not missing any pins
+    """Verifying that given requirements file is not missing any pins
 
     args:
 
