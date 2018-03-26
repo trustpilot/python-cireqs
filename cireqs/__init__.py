@@ -97,7 +97,7 @@ def expand_requirements(dir_path, requirements_filename, expanded_requirements_f
 def check_if_requirements_are_up_to_date(dir_path, requirements_filename, **kwargs):
     commands = [
         "pip install -q -r {} ".format(requirements_filename),
-        "pip freeze -r {} ".format(requirements_filename)
+        "pip freeze -q -r {} ".format(requirements_filename)
     ]
     dir_path = os.path.normpath(dir_path) + os.sep
     working_dir = '/src'

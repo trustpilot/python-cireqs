@@ -23,7 +23,8 @@ requirements = [
 
 test_requirements = [
     'pytest==3.2.0',
-    'prospector==0.12.7'
+    'prospector==0.12.7',
+    'isort==4.2.15' # dependency of pylint
 ]
 
 extras = {
