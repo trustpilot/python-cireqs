@@ -38,8 +38,13 @@ History
 
 * default timeout value for docker operations increased to 120 seconds (from 10)
 
-1.0.0 (2018-11-01)
+1.0.0 (2017-11-01)
 ------------------
 
 * introduce verify and expand and deprecate verify_requirements and expand_requirements by showing warnings
-* message when commands are successfull
+* message when commands are successful
+
+1.0.3 (2018-03-26)
+------------------
+
+* Handle pip giving an upgrade warning
