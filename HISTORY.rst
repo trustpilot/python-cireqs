@@ -48,3 +48,8 @@ History
 ------------------
 
 * Handle pip giving an upgrade warning
+
+1.0.4 (2018-07-24)
+------------------
+
+* Upgrade pip before installing requirements to avoid upgrade error.

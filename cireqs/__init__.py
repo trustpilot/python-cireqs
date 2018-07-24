@@ -39,6 +39,7 @@ def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5
     volumes = volumes or {}
     volumes = [t for k,v in volumes.items() for t in ['-v', ':'.join([k,v])]]
     working_dir = ['-w', working_dir] if working_dir else []
+    commands = ['pip install --upgrade -q pip'] + commands
     command = ' && '.join(commands)
     ctr_name = 'cireqs_container'
     docker_image = 'python:{}'.format(python_version)
