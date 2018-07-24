@@ -23,8 +23,7 @@ requirements = [
 
 test_requirements = [
     'pytest==3.2.0',
-    'prospector==0.12.7',
-    'isort==4.2.15' # dependency of pylint
+    'prospector==0.12.11',
 ]
 
 extras = {
@@ -63,7 +62,6 @@ setup(
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
