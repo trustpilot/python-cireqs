@@ -1,3 +1,4 @@
-click-log==0.1.8
+cireqs==1.0.4
 ## The following requirements were added by pip freeze:
 click==6.7
+click-log==0.1.8

@@ -18,21 +18,26 @@ sys.path.insert(0, current_dir[: current_dir.rfind(path.sep)])
 import cireqs.__version__  #pylint: disable=import-error
 
 
-conf = namedtuple('Config', 'dir_path python_version timeout')
+Conf = namedtuple('Config', 'dir_path python_version timeout env_vars, run_dry')
 
 
 @click.group(invoke_without_command=True)
 @click.pass_context
-@click.option('--pythonversion', nargs=1, type=str, default='3.5.2', help='python version to use for calculating dependencies')
+@click.option('--pythonversion', nargs=1, type=str, default='3.6.1', help='python version to use for calculating dependencies, defaults to 3.6.1')
 @click.option('--dirpath', nargs=1, help="path to directory containing requirement files, defaults to PWD")
-@click.option('--timeout', nargs=1, type=int, default=120, help="how long to wait for docker commands")
+@click.option('--timeout', nargs=1, type=int, default=120, help="how long to wait for docker commands, defaults to 120s")
+@click.option('--envvar','-e', nargs=1, type=str, default='', multiple=True, help="environment var ENV_VAR=VALUE (or ENV_VAR to copy env_var), multiple allowed, defaults to None")
+@click.option('--version', '-V', is_flag=True, help="show version and exit")
+@click.option('--dry', is_flag=True, help="print out docker command line without running it")
 @click_log.simple_verbosity_option()
 @click_log.init('cireqs.cli')
-def cli(ctx, dirpath, pythonversion, timeout):
-    ctx.obj = conf(
+def cli(ctx, dirpath, pythonversion, timeout, envvar, version, dry):
+    ctx.obj = Conf(
         python_version=pythonversion,
         dir_path=dirpath or getcwd(),
-        timeout=timeout
+        timeout=timeout,
+        env_vars=envvar,
+        run_dry=dry
     )
     cireqs.set_log_level(click_log.get_level())
 
@@ -50,6 +55,9 @@ d88' `"Y8 `888  `888""8P d88' `88b d88' `888  d88(  "8
         "v{}".format(cireqs.__version__.__version__), fg='red') + "\n"
 
     if ctx.invoked_subcommand is None:
+        if version:
+            click.echo(click.style(cireqs.__version__.__version__, fg='green'))
+            return
         click.echo("\n".join([splash, ctx.get_help()]))
         return
 
