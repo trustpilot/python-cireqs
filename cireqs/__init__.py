@@ -1,13 +1,16 @@
 import logging
 import os
 import difflib
-from subprocess import check_output, CalledProcessError, STDOUT
+from subprocess import check_output, CalledProcessError, STDOUT, Popen, PIPE
+
 try:
     from subprocess import TimeoutExpired, DEVNULL
 except ImportError:
     TimeoutExpired = None
     DEVNULL = STDOUT
 
+class WrongPythonError(Exception):
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +42,8 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
     volumes = volumes or {}
     volumes = [t for k,v in volumes.items() for t in ['-v', ':'.join([k,v])]]
     working_dir = ['-w', working_dir] if working_dir else []
-    commands = ['pip install --upgrade -q pip'] + commands
-    command = ' && '.join(commands)
+    commands = ['/usr/local/bin/pip install --upgrade -q pip && /usr/local/bin/pip install --upgrade setuptools'] + commands
+    command =  ' && '.join(commands)
     env_vars = [e for env_var in env_vars for e in ['-e', env_var]] if env_vars else []
 
     ctr_name = 'cireqs_container'
@@ -69,26 +72,38 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
     logger.debug("issuing command: %s", " ".join(full_command_list))
     timeout_kwargs = {'timeout':timeout} if TimeoutExpired is not None else {}
     try:
-        output = check_output(
-            full_command_list,
-            stderr=STDOUT,
-            **timeout_kwargs
-        )
+
+        p = Popen(full_command_list, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        output, err = p.communicate()
+        rc = p.returncode
+        if rc != 0:
+            output = output.decode('ascii')
+            err = err.decode('ascii')
+
+            if 'requires Python ' in output:
+                required_python_version = output.split('requires Python ')[1].split(' ')[0][:-3]
+                package = output.strip().rsplit('RuntimeError: ', 1)[1].strip().split(' ', 1)[0]
+                raise WrongPythonError("wrong python version, '{1}' requires:{0}, try setting --pythonversion to {0}".format(required_python_version, package))
+
+            raise Exception(output + err)
         return output
     except Exception as exc:
         if isinstance(exc, CalledProcessError):
-            logger.exception("Command resulted in error. " + ' '.join(full_command_list))
+            logger.error("Command resulted in error. " + ' '.join(full_command_list))
         elif isinstance(exc, TimeoutExpired):
             logger.warning("received timeout")
-        logger.error("UNKNOWN ERROR")
+        elif isinstance(exc, WrongPythonError):
+            logger.error(exc)
+        else:
+            logger.error("UNKNOWN ERROR\n" + str(exc))
         docker_kill_and_remove(ctr_name)
         exit(-1)
 
 
 def expand_requirements(dir_path, requirements_filename, expanded_requirements_filename, **kwargs):
     commands = [
-        "pip install -q -r {}".format(requirements_filename),
-        "pip freeze -r {} > {}".format(
+        "/usr/local/bin/pip install -r {}".format(requirements_filename),
+        "/usr/local/bin/pip freeze -r {} > {}".format(
             requirements_filename, expanded_requirements_filename
         )
     ]
@@ -104,8 +119,8 @@ def expand_requirements(dir_path, requirements_filename, expanded_requirements_f
 
 def check_if_requirements_are_up_to_date(dir_path, requirements_filename, **kwargs):
     commands = [
-        "pip install -q -r {} ".format(requirements_filename),
-        "pip freeze -q -r {} ".format(requirements_filename)
+        "/usr/local/bin/pip install -q -r {} ".format(requirements_filename),
+        "/usr/local/bin/pip freeze -q -r {} ".format(requirements_filename)
     ]
     dir_path = os.path.normpath(dir_path) + os.sep
     working_dir = '/src'

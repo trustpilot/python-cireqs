@@ -65,3 +65,8 @@ History
 ------------------
 
 * warns and exits on missing input_requirements file
+
+2.0.2 (2018-12-14)
+------------------
+
+* warns and exits on package requiring different pythonversion than specified
