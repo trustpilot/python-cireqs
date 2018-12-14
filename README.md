@@ -33,11 +33,39 @@ cireqs verify input_requirements
 Cireqs uses overridable defaults:
 
 * **dirpath:** set to current working directory (`PWD`)
-* **pythonversion:** set to `3.5.2`
+* **pythonversion:** set to `3.6.1`
 * **output_requirements_filename:** set to `requirements.txt`
 * **input_requirements_filename:** set to:
 * * `requirements.txt` in *verify*
 * * `requirements_to_expand.txt` in *expand*
+
+## private packages
+
+To install private packages like with Gemfury you have to inject your private access token as an env var to cireqs, use the **--envar** (`-e`) option to pass in env-vars to the pip install process. you can specify them in the following ways:
+
+```
+cireqs --envar foo=bar
+```
+Will set the envvar foo to the value bar
+
+```
+cireqs --envvar foo
+```
+will set the envvar foo to the value of the hosts `foo` env var.
+
+### Gemfury example
+
+create a requirements_to_expand.txt file with the following contents:
+```
+--index-url https://${GEM_FURY_TOKEN}@pypi.fury.io/trustpilot/
+--extra-index-url https://pypi.org/simple/
+secret_private_package
+```
+to expand run
+```
+cireqs --envvar GEM_FURY_TOKEN expand
+```
+And cireqs will inject the hosts value of `GEM_FURY_TOKEN` into the `expand` process.
 
 ## Continuous Integration
 
@@ -63,13 +91,21 @@ Cireqs includes the `cireqs` command:
 Usage: cireqs [OPTIONS] COMMAND [ARGS]...
 
 Options:
-  --pythonversion TEXT  python version to use for calculating dependencies
+  --pythonversion TEXT  python version to use for calculating dependencies,
+                        defaults to 3.6.1
   --dirpath TEXT        path to directory containing requirement files,
                         defaults to PWD
+  --timeout INTEGER     how long to wait for docker commands, defaults to 120s
+  -e, --envvar TEXT     environment var ENV_VAR=VALUE (or ENV_VAR to copy
+                        env_var), multiple allowed, defaults to None
+  -V, --version         show version and exit
+  --dry                 print out docker command line without running it
   -v, --verbosity LVL   Either CRITICAL, ERROR, WARNING, INFO or DEBUG
   --help                Show this message and exit.
 
 Commands:
-  expand  Expand given requirements file by extending...
-  verify  Verifying that given requirements file is not...
+  expand               Expand given requirements file by extending...
+  expand_requirements
+  verify               Verifying that given requirements file is not...
+  verify_requirements
 ```

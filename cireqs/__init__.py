@@ -35,14 +35,16 @@ def docker_kill_and_remove(ctr_name):
         logger.error('could not stop docker container:{}'.format(ctr_name))
 
 
-def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5.2', timeout=120, **kwargs):
+def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, python_version='3.6.1', timeout=120, run_dry=False, **kwargs):
     volumes = volumes or {}
     volumes = [t for k,v in volumes.items() for t in ['-v', ':'.join([k,v])]]
     working_dir = ['-w', working_dir] if working_dir else []
     commands = ['pip install --upgrade -q pip'] + commands
     command = ' && '.join(commands)
+    env_vars = [e for env_var in env_vars for e in ['-e', env_var]] if env_vars else []
+
     ctr_name = 'cireqs_container'
-    docker_image = 'python:{}'.format(python_version)
+    docker_image = 'python:{}-alpine'.format(python_version)
 
     # check if has image locally:
     has_image = check_output(
@@ -57,9 +59,13 @@ def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5
         )
 
     full_command_list = [
-       'docker', 'run', '--rm', '--name', ctr_name] + volumes + working_dir + [
+       'docker', 'run', '--rm', '--name', ctr_name] + env_vars + volumes + working_dir + [
        docker_image, 'sh', '-c', command
     ]
+    if run_dry:
+        print(' '.join(full_command_list), flush=True)
+        exit(0)
+
     logger.debug("issuing command: %s", " ".join(full_command_list))
     timeout_kwargs = {'timeout':timeout} if TimeoutExpired is not None else {}
     try:
@@ -74,6 +80,8 @@ def docker_execute(commands, volumes=None, working_dir=None, python_version='3.5
             logger.exception("Command resulted in error. " + ' '.join(full_command_list))
         elif isinstance(exc, TimeoutExpired):
             logger.warning("received timeout")
+        logger.error("UNKNOWN ERROR")
+        print("ERROR", exc, flush=True)
         docker_kill_and_remove(ctr_name)
         exit(-1)
 

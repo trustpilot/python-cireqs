@@ -53,3 +53,10 @@ History
 ------------------
 
 * Upgrade pip before installing requirements to avoid upgrade error.
+
+2.0.0 (2018-12-14)
+------------------
+
+* added --dry option for running dry (printing docker cmd line)
+* added -V for printing version
+* added --envvar (-e) for injecting env vars into the docker container running pip install, useful for private repos like in Gemfury.io
