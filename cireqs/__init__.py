@@ -1,6 +1,7 @@
 import logging
 import os
 import difflib
+import time
 from subprocess import check_output, CalledProcessError, STDOUT, Popen, PIPE
 
 try:
@@ -17,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 def set_log_level(level):
     logger.setLevel(level)
-
 
 def docker_kill_and_remove(ctr_name):
     try:
@@ -81,8 +81,16 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
     try:
 
         p = Popen(full_command_list, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        output, err = p.communicate()
-        rc = p.returncode
+        output = err = None
+        for t in range(timeout):
+            time.sleep(1)
+            if p.poll() is not None:
+                output, err = p.communicate()
+                rc = p.returncode
+                break
+        p.kill()
+        if rc is None:
+            raise TimeoutExpired()
         if rc != 0:
             output = output.decode('ascii')
             err = err.decode('ascii')
