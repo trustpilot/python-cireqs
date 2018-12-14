@@ -63,7 +63,7 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
        docker_image, 'sh', '-c', command
     ]
     if run_dry:
-        print(' '.join(full_command_list), flush=True)
+        print(' '.join(full_command_list))
         exit(0)
 
     logger.debug("issuing command: %s", " ".join(full_command_list))
@@ -81,7 +81,6 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
         elif isinstance(exc, TimeoutExpired):
             logger.warning("received timeout")
         logger.error("UNKNOWN ERROR")
-        print("ERROR", exc, flush=True)
         docker_kill_and_remove(ctr_name)
         exit(-1)
 
