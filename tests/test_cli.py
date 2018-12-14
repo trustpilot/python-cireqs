@@ -76,3 +76,13 @@ def test_expand_requirements_with_env_var():
     assserted_docker_command_line = "docker run --rm --name cireqs_container -e foo=bar -v -w /src python:3.6.1-alpine sh -c pip install --upgrade -q pip && pip install -q -r input_requirements_3.txt  && pip freeze -q -r input_requirements_3.txt"
     assert assserted_docker_command_line == docker_command_line_without_path.strip()
     assert result.exit_code == 0
+
+
+def test_missing_input_requirements_file():
+    requirements_filename = 'not_existing.txt'
+    runner = CliRunner()
+    result = runner.invoke(cli,
+                           ['--dirpath', test_dir_path, '-e' 'foo=bar', '--dry','verify',
+                            requirements_filename])
+    assert result.output.strip() == requirements_filename + ' does not exist'
+    assert result.exit_code == -1
