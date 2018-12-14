@@ -86,3 +86,12 @@ def test_missing_input_requirements_file():
                             requirements_filename])
     assert result.output.strip() == requirements_filename + ' does not exist'
     assert result.exit_code == -1
+
+def test_wrong_python_version():
+    requirements_filename = 'input_requirements_4.txt'
+    runner = CliRunner()
+    result = runner.invoke(cli,
+                           ['--pythonversion','2.7','--dirpath', test_dir_path,'expand',
+                            requirements_filename])
+    assert result.output.strip() == "error: wrong python version, 'aiostream' requires:3.6, try setting --pythonversion to 3.6"
+    assert result.exit_code == -1
