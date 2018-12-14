@@ -5,7 +5,7 @@ import click_log
 logger = click_log.basic_config()
 
 import sys
-from os import path, getcwd
+from os import path, getcwd, sep
 
 from inspect import getsourcefile
 from collections import namedtuple
@@ -20,6 +20,11 @@ import cireqs.__version__  #pylint: disable=import-error
 
 Conf = namedtuple('Config', 'dir_path python_version timeout env_vars, run_dry')
 
+def exit_if_file_not_exists(filename, conf):
+    dir_path = path.normpath(conf.dir_path) + sep
+    if not path.isfile(dir_path + filename):
+        click.echo(filename + " does not exist")
+        exit(-1)
 
 @click.group(invoke_without_command=True)
 @click.pass_context
@@ -76,7 +81,7 @@ def expand(conf, output_requirements_filename, input_requirements_filename):
     output_requirements_filename: the output filename for the expanded
     requirements file
     """
-
+    exit_if_file_not_exists(input_requirements_filename, conf)
     cireqs.expand_requirements(
         requirements_filename=input_requirements_filename,
         expanded_requirements_filename=output_requirements_filename,
@@ -108,6 +113,8 @@ def verify(conf, input_requirements_filename):
     input_requirements_filename: requriements file to verify
 
     """
+    exit_if_file_not_exists(input_requirements_filename, conf)
+
     cireqs.check_if_requirements_are_up_to_date(
         requirements_filename=input_requirements_filename,
         **conf._asdict())
