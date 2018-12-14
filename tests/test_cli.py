@@ -67,14 +67,8 @@ def test_expand_requirements_with_env_var():
     result = runner.invoke(cli,
                            ['--dirpath', test_dir_path, '-e' 'foo=bar', '--dry','verify',
                             requirements_filename])
-    print(result.output)
-    docker_command_line = result.output
-    first_half = 'docker run --rm --name cireqs_container -e foo=bar -v '
-    last_half_index_begin = docker_command_line.index('-w /src')
-    docker_command_line_without_path = docker_command_line[:len(first_half)] + docker_command_line[last_half_index_begin:]
-
-    assserted_docker_command_line = "docker run --rm --name cireqs_container -e foo=bar -v -w /src python:3.6.1-alpine sh -c pip install --upgrade -q pip && pip install -q -r input_requirements_3.txt  && pip freeze -q -r input_requirements_3.txt"
-    assert assserted_docker_command_line == docker_command_line_without_path.strip()
+    assserted_docker_command_line  ='docker run --rm --name cireqs_container -e foo=bar -v'
+    assert assserted_docker_command_line in result.output
     assert result.exit_code == 0
 
 
@@ -85,4 +79,22 @@ def test_missing_input_requirements_file():
                            ['--dirpath', test_dir_path, '-e' 'foo=bar', '--dry','verify',
                             requirements_filename])
     assert result.output.strip() == requirements_filename + ' does not exist'
+    assert result.exit_code == -1
+
+def test_wrong_python_version():
+    requirements_filename = 'input_requirements_4.txt'
+    runner = CliRunner()
+    result = runner.invoke(cli,
+                           ['--pythonversion','2.7','--dirpath', test_dir_path,'expand',
+                            requirements_filename])
+    assert result.output.strip() == "error: wrong python version, 'aiostream' requires:3.6, try setting --pythonversion to 3.6"
+    assert result.exit_code == -1
+
+def test_image_does_not_exist():
+    requirements_filename = 'input_requirements_4.txt'
+    runner = CliRunner()
+    result = runner.invoke(cli,
+                           ['--pythonversion','2.7.10','--dirpath', test_dir_path,'expand',
+                            requirements_filename])
+    assert result.output.strip() == "error: Couldn't pull image:python:2.7.10-alpine, does it exist?"
     assert result.exit_code == -1
