@@ -42,7 +42,7 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
     volumes = volumes or {}
     volumes = [t for k,v in volumes.items() for t in ['-v', ':'.join([k,v])]]
     working_dir = ['-w', working_dir] if working_dir else []
-    commands = ['/usr/local/bin/pip install --upgrade -q pip && /usr/local/bin/pip install --upgrade setuptools'] + commands
+    commands = ['/usr/local/bin/pip install --upgrade -q pip && /usr/local/bin/pip install --upgrade -q setuptools'] + commands
     command =  ' && '.join(commands)
     env_vars = [e for env_var in env_vars for e in ['-e', env_var]] if env_vars else []
 
@@ -56,10 +56,17 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
     )
     if not has_image:
         logger.debug('pulling docker image: {}'.format(docker_image))
-        check_output(
-            ['docker', 'pull', docker_image],
-            stderr=STDOUT
-        )
+        try:
+            check_output(
+                ['docker', 'pull', docker_image],
+                stderr=STDOUT
+            )
+        except Exception as exc:
+            if isinstance(exc, CalledProcessError):
+                logger.error("Couldn't pull image:{}, does it exist?".format(docker_image))
+            else:
+                logger.error("UNKNOWN ERROR\n" + str(exc))
+            exit(-1)
 
     full_command_list = [
        'docker', 'run', '--rm', '--name', ctr_name] + env_vars + volumes + working_dir + [
