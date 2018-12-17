@@ -94,7 +94,7 @@ def test_image_does_not_exist():
     requirements_filename = 'input_requirements_4.txt'
     runner = CliRunner()
     result = runner.invoke(cli,
-                           ['--pythonversion','2.7.10','--dirpath', test_dir_path,'expand',
+                           ['--pythonversion','2.7.666','--dirpath', test_dir_path,'expand',
                             requirements_filename])
-    assert result.output.strip() == "error: Couldn't pull image:python:2.7.10-alpine, does it exist?"
+    assert result.output.strip() == "error: Couldn't pull image:python:2.7.666, does it exist?"
     assert result.exit_code == -1
