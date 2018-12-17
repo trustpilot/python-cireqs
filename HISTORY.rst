@@ -70,3 +70,8 @@ History
 ------------------
 
 * warns and exits on package requiring different pythonversion than specified
+
+2.0.3 (2018-12-17)
+------------------
+
+* avoid using alpine linux as bse image since its compiled without gcc (makes it impossible to install UVLOOP for instance)

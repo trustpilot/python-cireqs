@@ -47,7 +47,7 @@ def docker_execute(commands, volumes=None, working_dir=None, env_vars=None, pyth
     env_vars = [e for env_var in env_vars for e in ['-e', env_var]] if env_vars else []
 
     ctr_name = 'cireqs_container'
-    docker_image = 'python:{}-alpine'.format(python_version)
+    docker_image = 'python:{}'.format(python_version)
 
     # check if has image locally:
     has_image = check_output(
